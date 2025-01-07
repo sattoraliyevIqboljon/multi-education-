@@ -1,0 +1,28 @@
+export class DtoGroup {
+    static SEARCH = "search"
+    static CREATE = "create"
+    static GET = "get"
+    static UPDATE = "update"
+    static DELETE = "delete"
+    static LOGIN = "login"
+    static REGISTER = "register"
+    static GET_BY_ID = "getById"
+    static PAGING = "paging"
+    static ACTIVATE = "activate"
+    static REMOVING_PROFIT = 'removingProfit'
+    static REMOVING_ALL = "removingAll"
+
+    static CHECK_OTP = "checkOtp"
+    static CHECK_USER = "checkUser"
+    static USER_PROFILE = "userProfile"
+    static PASSPORT_DATA = "passportData"
+    static PASSWORD = "password"
+    static REGISTER_EMAIL = "registerEmail"
+    static LOGIN_EMAIL = "loginEmail"
+    static CHECK_EMAIL = "checkEmail"
+    static WORK_PROFILE = "workProfile"
+    static ADDRESS = "address"
+    static OTHER_CONTACT = "otherContact"
+    static PINKOD = "pinkod"
+    static FORGOT_PASSWORD = "forgotPassword"
+}

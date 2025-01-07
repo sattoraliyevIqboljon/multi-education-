@@ -1,0 +1,33 @@
+{
+  "name": "structure_fastify",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev-admin": "nodemon ./src/admin/server.ts",
+    "build": "tsc",
+    "start-Admin": "node ./dist/admin/server.js",
+    "deploy": "scp -i serverPassword -r dist package.json uploads .env root@serverIp:/root/Projects/folder"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@fastify/cors": "^8.1.0",
+    "@fastify/jwt": "^9.0.2",
+    "@fastify/static": "^6.5.0",
+    "@typegoose/typegoose": "^12.10.1",
+    "axios": "^1.7.9",
+    "class-transformer": "^0.5.1",
+    "class-validator": "^0.14.1",
+    "dotenv": "^16.0.3",
+    "exceljs": "^4.3.0",
+    "fastify": "^5.2.1",
+    "fastify-file-upload": "^4.0.0",
+    "fastify-plugin": "^4.2.1",
+    "mongoose": "^8.9.0",
+    "pdfkit": "^0.13.0",
+    "ts-node": "^10.9.1"
+  }
+}
