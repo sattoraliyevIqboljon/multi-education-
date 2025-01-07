@@ -5,8 +5,9 @@ import { validateIt } from "../../common/validation/validate";
 
 import { hasAccess } from "../service/role.service";
 import { TeacherChangePasswordDto, TeacherDto, TeacherDtoGroup, TeacherGetDto } from "../../common/validation/dto/admin/teacher.dto";
-import { clearAllLogsService, createExcel, createTeacherService, deleteTeacherService, getMyselfService, getPagingTeacherLogsService, getTeacherByIdService, getTeacherByPagingService, loginTeacherService, updatePasswordService, updateTeacherService } from "../service/teacher.service";
+import { clearAllLogsService, createExcel, createTeacherService, deleteTeacherService, getMyselfService, getPagingTeacherLogsService, getTeacherByIdService, getTeacherByPagingService, getTimeTableByTeacherIdService, loginTeacherService, updatePasswordService, updateTeacherService } from "../service/teacher.service";
 import { PagingDto } from "../../common/validation/dto/paging.dto";
+import { TimetableDto, TimetableDtoGroup } from "../../common/validation/dto/admin/timeTable.dto";
 
 export async function createTeacherHandler(req, reply) {
     // await hasAccess(req.employee.roleId, Roles.EMPLOYEE_CREATE);
@@ -106,6 +107,19 @@ export async function getExelHandler(req, reply) {
     // await hasAccess(req.employee.roleId, Roles.EMPLOYEE);
 
     const result = await createExcel()
+    reply.success(result)
+}
+
+
+
+
+
+
+export async function getMyTimeTableHandler(req, reply) {
+    req.query.teacherId = (req.teacher._id).toString()
+    const data = await validateIt(req.query, TimetableDto, TimetableDtoGroup.MY_TABLE)
+    console.log("data : ", data)
+    const result = await getTimeTableByTeacherIdService(data.teacherId, data)
     reply.success(result)
 }
 

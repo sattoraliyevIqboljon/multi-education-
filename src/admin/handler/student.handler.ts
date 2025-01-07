@@ -44,11 +44,6 @@ export async function deleteStudentHandler(req, reply) {
     reply.success(result)
 }
 
-// export async function getMySelfHandler(req, reply) {
-//     const id = (req.student._id).toString()
-//     const emp = await getMyselfService(id)
-//     reply.success(emp)
-// }
 export async function getPagingStudentLogsHandler(req, reply) {
     const investorId = (req.student._id).toString()
     const data = await validateIt(req.query, StudentGetDto, StudentDtoGroup.PAGING)
@@ -67,4 +62,7 @@ export async function getStudentExelHandler(req, reply) {
     const result = await createAllStudentsExcel()
     reply.success(result)
 }
+
+
+
 

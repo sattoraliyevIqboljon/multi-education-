@@ -117,6 +117,8 @@ export class TeacherDto extends BaseDto {
     @IsOptional({ groups: [TeacherDtoGroup.UPDATE_MYSELF] })
     @IsBoolean({ groups: [TeacherDtoGroup.UPDATE_MYSELF] })
     saveLogs: boolean;
+
+    
 }
 
 export class TeacherChangePasswordDto extends BaseDto {

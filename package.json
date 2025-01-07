@@ -6,6 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev-admin": "nodemon ./src/admin/server.ts",
+    "dev-student": "nodemon ./src/student/server.ts",
     "build": "tsc",
     "start-Admin": "node ./dist/admin/server.js",
     "deploy": "scp -i serverPassword -r dist package.json uploads .env root@serverIp:/root/Projects/folder"
@@ -28,6 +29,8 @@
     "fastify-plugin": "^4.2.1",
     "mongoose": "^8.9.0",
     "pdfkit": "^0.13.0",
-    "ts-node": "^10.9.1"
+    "reflect-metadata": "^0.2.2",
+    "ts-node": "^10.9.1",
+    "tslib": "^2.8.1"
   }
 }

@@ -10,11 +10,13 @@ async function student(server, opt) {
 
 
 
+
+
     server.get("/student/logs", { preValidation: server.authAdmin }, getPagingStudentLogsHandler)
     server.delete("/student/logs", { preValidation: server.authAdmin }, clearAllStudentLogsHandler)
 
     server.get("/student/excel", getStudentExelHandler)
-
+    
 
 }
 

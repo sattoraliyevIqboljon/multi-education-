@@ -73,10 +73,8 @@ export class StudentDto extends BaseDto {
     // @IsMongoId({ groups: [StudentDtoGroup.CREATE,StudentDtoGroup.UPDATE] })
     // roleId: string
 
-    @IsOptional({ groups: [StudentDtoGroup.UPDATE_MYSELF] })
-    @IsString({
-        groups: [StudentDtoGroup.CREATE, StudentDtoGroup.UPDATE_MYSELF],
-    })
+    @IsOptional({ groups: [StudentDtoGroup.UPDATE_MYSELF, StudentDtoGroup.UPDATE,] })
+    @IsString({ groups: [StudentDtoGroup.CREATE, StudentDtoGroup.UPDATE, StudentDtoGroup.UPDATE_MYSELF, StudentDtoGroup.LOGIN] })
     login: string;
 
     @IsOptional({
@@ -115,7 +113,7 @@ export class StudentDto extends BaseDto {
     saveLogs: boolean;
 }
 
-export class TeacherChangePasswordDto extends BaseDto {
+export class StudentChangePasswordDto extends BaseDto {
     @IsString({ groups: [StudentDtoGroup.PASSWORD] })
     currentPassword: string;
 

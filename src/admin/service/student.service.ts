@@ -16,6 +16,7 @@ import { BaseResponse } from "../../common/error/base.response";
 import { StudentModel } from "../../common/db/model/admin/students/students.model";
 import { StudentResponse } from "../../common/db/model/admin/students/student.error";
 import { StudentDto } from "../../common/validation/dto/admin/student.dto";
+import { TimetableModel } from "../../common/db/model/admin/timeTable/timeTable.model";
 
 /**
  * student create  service
@@ -108,17 +109,17 @@ export async function getStudentByIdService(_id) {
 /**
  * student  get my self  service
  */
-export async function getMyselfStudentService(id) {
-    try {
-        const student = await getStudentByIdService(id);
-        if (!student) throw StudentResponse.NotFound(id);
+// export async function getMyselfStudentService(id) {
+//     try {
+//         const student = await getStudentByIdService(id);
+//         if (!student) throw StudentResponse.NotFound(id);
 
-        return student;
-    } catch (error) {
-        console.log(error);
-        throw StudentResponse.UnknownError(error);
-    }
-}
+//         return student;
+//     } catch (error) {
+//         console.log(error);
+//         throw StudentResponse.UnknownError(error);
+//     }
+// }
 
 export async function getStudentByPhoneNumberService(phoneNumber) {
     try {
@@ -294,3 +295,7 @@ export async function createAllStudentsExcel() {
         throw BaseResponse.UnknownError(error);
     }
 }
+
+
+
+

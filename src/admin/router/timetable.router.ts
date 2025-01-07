@@ -1,5 +1,4 @@
 import fp from "fastify-plugin";
-import { createGroupHandler, deleteGroupHandler, getGroupByIdHandler, getGroupByPagingHandler, updateGroupHandler } from "../handler/group.handler";
 import { createTimeTableHandler, deleteTimeTableHandler, getTimeTableByIdHandler, getTimeTableByPagingHandler, updateTimeTableHandler } from "../handler/timeTable.handler";
 
 async function timeTable(server, opt) {

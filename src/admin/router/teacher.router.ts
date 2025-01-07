@@ -1,5 +1,5 @@
 import fp from "fastify-plugin";
-import { clearAllLogsHandler, createTeacherHandler, deleteTeacherHandler, getExelHandler, getMySelfHandler, getPagingLogsHandler, getTeacherByIdHandler, getTeacherByPagingHandler, loginTeacherHandler, updatePasswordHandler, updateTeacherHandler } from "../handler/teacher.handler";
+import { clearAllLogsHandler, createTeacherHandler, deleteTeacherHandler, getExelHandler, getMySelfHandler, getMyTimeTableHandler, getPagingLogsHandler, getTeacherByIdHandler, getTeacherByPagingHandler, loginTeacherHandler, updatePasswordHandler, updateTeacherHandler } from "../handler/teacher.handler";
 
 async function teacher(server, opt) {
     server.post("/teacher", { preValidation: server.authAdmin }, createTeacherHandler)  //
@@ -10,6 +10,11 @@ async function teacher(server, opt) {
     server.put("/teacher/:_id", { preValidation: server.authAdmin }, updateTeacherHandler)//
     server.put("/teacher/password", { preValidation: server.authAdmin }, updatePasswordHandler)//
     server.delete("/teacher/:_id", { preValidation: server.authAdmin }, deleteTeacherHandler)
+
+    server.get("/teacher/table", { preValidation: server.authAdmin }, getMyTimeTableHandler)
+
+    
+
 
 
     server.get("/teacher/logs", { preValidation: server.authAdmin }, getPagingLogsHandler)

@@ -16,13 +16,13 @@ import { TeacherModel } from "../../common/db/model/admin/teacher/teacher.model"
 import { TeacherResponse } from "../../common/db/model/admin/teacher/teacher.error";
 import { TeacherDto } from "../../common/validation/dto/admin/teacher.dto";
 import { BaseResponse } from "../../common/error/base.response";
+import { TimetableModel } from "../../common/db/model/admin/timeTable/timeTable.model";
 
 /**
  * teacher create  service
  */
 export async function createTeacherService(data: TeacherDto) {
     try {
-
         function dtoToModel(data: TeacherDto) {
             return {
                 ...data, // DTOning boshqa maydonlarini nusxalash
@@ -36,9 +36,8 @@ export async function createTeacherService(data: TeacherDto) {
         }
         console.log("teacher create :  ", data);
 
-        const resData = dtoToModel(data)
+        const resData = dtoToModel(data);
         console.log("teacher create 2 :  ", resData);
-
 
         return await create(TeacherModel, resData);
     } catch (e) {
@@ -85,7 +84,7 @@ export async function getTeacherByPagingService(data: PagingDto) {
             TeacherModel,
             data,
             query,
-            {createdAt:1},
+            { createdAt: 1 },
             $pipeline
         );
         return teacher;
@@ -170,8 +169,6 @@ export async function updatePasswordService(data) {
 
 export async function updateTeacherService(_id, data) {
     try {
-
-
         return await updateOneById(TeacherModel, _id, data);
     } catch (e) {
         if (e.code == 11000)
@@ -292,6 +289,137 @@ export async function createExcel() {
         const localPath = path.join(__dirname, file);
         await workbook.xlsx.writeFile(localPath);
         return `/excel/${filename}`;
+    } catch (error) {
+        console.log(error);
+        throw BaseResponse.UnknownError(error);
+    }
+}
+
+export async function getTimeTableByTeacherIdService(
+    teacherId: string,
+    data
+) {
+    try {
+        if (!data.from || !data.to) {
+            // Sana diapazonlarini hisoblash
+            const getFormattedDate = (date) => date.toISOString().split('T')[0];
+        
+            const today = new Date(); // Bugungi sana
+            const sevenDaysAgo = new Date(); // 7 kun oldingi sana
+            sevenDaysAgo.setDate(today.getDate() - 6);
+        
+            // yyyy-mm-dd formatida olish
+            data.from = getFormattedDate(sevenDaysAgo);
+            data.to = getFormattedDate(today);
+        }
+
+        
+        const $match = {
+            $match: {
+                $and: [
+                    { teacherId: new Types.ObjectId(teacherId) },
+                    { date: { $gte: data.from } },
+                    { date: { $lte: data.to  } },
+                ],
+            },
+        };
+
+        const $projectTeacher = {
+            $project: {
+                firstName: 1,
+                lastName: 1,
+            },
+        };
+
+        const $lookupTeacher = {
+            $lookup: {
+                from: CollectionNames.TEACHER,
+                localField: "teacherId",
+                foreignField: "_id",
+                pipeline: [$projectTeacher],
+                as: "teacher",
+            },
+        };
+
+        const $unwindTeacher = {
+            $unwind: {
+                path: "$teacher",
+                preserveNullAndEmptyArrays: true,
+            },
+        };
+
+        const $projectGroup = {
+            $project: {
+                name: 1,
+                description: 1,
+            },
+        };
+
+        const $lookupGroup = {
+            $lookup: {
+                from: CollectionNames.GROUP,
+                localField: "groupId",
+                foreignField: "_id",
+                pipeline: [$projectGroup],
+                as: "group",
+            },
+        };
+
+        const $unwindGroup = {
+            $unwind: {
+                path: "$group",
+                preserveNullAndEmptyArrays: true,
+            },
+        };
+
+        const $projectCourse = {
+            $project: {
+                title: 1,
+                description: 1,
+            },
+        };
+
+        const $lookupCourse = {
+            $lookup: {
+                from: CollectionNames.COURSE,
+                localField: "courseId",
+                foreignField: "_id",
+                pipeline: [$projectCourse],
+                as: "course",
+            },
+        };
+
+        const $unwindCourse = {
+            $unwind: {
+                path: "$course",
+                preserveNullAndEmptyArrays: true,
+            },
+        };
+
+        const $project = {
+            $project: {
+                date: 1,
+                startTime: 1,
+                endTime: 1,
+                teacher: "$teacher",
+                course: "$course",
+                group: "$group",
+            },
+        };
+        const $pipeline = [
+            $match,
+            $lookupTeacher,
+            $unwindTeacher,
+            $lookupGroup,
+            $unwindGroup,
+            $lookupCourse,
+            $unwindCourse,
+            $project,
+        ];
+
+        const table = await aggregate(TimetableModel, $pipeline);
+        if (!table) throw BaseResponse.NotFound(data);
+        return table;
     } catch (error) {
         console.log(error);
         throw BaseResponse.UnknownError(error);
