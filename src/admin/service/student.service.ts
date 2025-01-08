@@ -16,28 +16,27 @@ import { BaseResponse } from "../../common/error/base.response";
 import { StudentModel } from "../../common/db/model/admin/students/students.model";
 import { StudentResponse } from "../../common/db/model/admin/students/student.error";
 import { StudentDto } from "../../common/validation/dto/admin/student.dto";
-import { TimetableModel } from "../../common/db/model/admin/timeTable/timeTable.model";
 
 /**
  * student create  service
  */
 export async function createStudentService(data: StudentDto) {
     try {
-        function dtoToModel(data: StudentDto) {
-            return {
-                ...data, // DTOning boshqa maydonlarini nusxalash
-                courses: data.courses.map(
-                    (course) => new Types.ObjectId(course.courseId) // courseId ni ObjectId ga o‘tkazish
-                ),
-                groups: data.groups.map(
-                    (group) => new Types.ObjectId(group.groupId) // groupId ni ObjectId ga o‘tkazish
-                ),
-            };
-        }
+        // function dtoToModel(data: StudentDto) {
+        //     return {
+        //         ...data, // DTOning boshqa maydonlarini nusxalash
+        //         courses: data.courses.map(
+        //             (course) => new Types.ObjectId(course.courseId) // courseId ni ObjectId ga o‘tkazish
+        //         ),
+        //         groups: data.groups.map(
+        //             (group) => new Types.ObjectId(group.groupId) // groupId ni ObjectId ga o‘tkazish
+        //         ),
+        //     };
+        // }
         console.log("student create :  ", data);
 
-        const resData = dtoToModel(data)
-                return await create(StudentModel, resData);
+        // const resData = dtoToModel(data)
+                return await create(StudentModel, data);
     } catch (e) {
         if (e.code == 11000)
             throw StudentResponse.AlreadyExists(Object.keys(e.keyPattern));

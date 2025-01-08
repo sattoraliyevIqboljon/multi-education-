@@ -10,13 +10,6 @@ export class GroupDtoGroup extends DtoGroup {
 }
 
 export class GroupGetDto extends PagingDto {}
-
-// Kurslar uchun DTO
- class CourseDto {
-    @IsMongoId({ groups: [GroupDtoGroup.CREATE, GroupDtoGroup.UPDATE] })
-    courseId: string;
-  }
-  
   // Guruh uchun asosiy DTO
 export class GroupDto extends BaseDto {
     @IsOptional({ groups: [ GroupDtoGroup.UPDATE] })
@@ -27,9 +20,7 @@ export class GroupDto extends BaseDto {
     @IsString({ groups: [GroupDtoGroup.CREATE, GroupDtoGroup.UPDATE] })
     description: string;
   
-    @IsOptional({ groups: [GroupDtoGroup.CREATE, GroupDtoGroup.UPDATE] })
-    @IsArray({ groups: [GroupDtoGroup.CREATE, GroupDtoGroup.UPDATE] })
-    @ValidateNested({ each: true, groups: [GroupDtoGroup.CREATE, GroupDtoGroup.UPDATE] })
-    @Type(() => CourseDto)
-    courses: CourseDto[];
+    @IsOptional({ groups: [GroupDtoGroup.UPDATE] })
+    @IsMongoId({ groups: [GroupDtoGroup.CREATE, GroupDtoGroup.UPDATE] })
+    courseId: string;
   }

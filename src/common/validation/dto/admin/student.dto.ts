@@ -92,21 +92,22 @@ export class StudentDto extends BaseDto {
 
     @IsOptional({ groups: [StudentDtoGroup.UPDATE] })
     @IsArray({ groups: [StudentDtoGroup.CREATE, StudentDtoGroup.UPDATE] })
-    @ValidateNested({
-        each: true,
-        groups: [StudentDtoGroup.CREATE, StudentDtoGroup.UPDATE],
-    })
-    @Type(() => CourseDto)
-    courses: CourseDto[];
+    @IsMongoId({ each: true, groups: [StudentDtoGroup.CREATE, StudentDtoGroup.UPDATE] })
+    // @ValidateNested({
+    //     each: true,
+    //     groups: [StudentDtoGroup.CREATE, StudentDtoGroup.UPDATE],
+    // })
+    courses: string[];
 
     @IsOptional({ groups: [StudentDtoGroup.UPDATE] })
     @IsArray({ groups: [StudentDtoGroup.CREATE, StudentDtoGroup.UPDATE] })
-    @ValidateNested({
-        each: true,
-        groups: [StudentDtoGroup.CREATE, StudentDtoGroup.UPDATE],
-    })
-    @Type(() => GroupDto)
-    groups: GroupDto[];
+    @IsMongoId({ each: true, groups: [StudentDtoGroup.CREATE, StudentDtoGroup.UPDATE] })
+    // @ValidateNested({
+    //     each: true,
+    //     groups: [StudentDtoGroup.CREATE, StudentDtoGroup.UPDATE],
+    // })
+    // @Type(() => GroupDto)
+    groups: string[];
 
     @IsOptional({ groups: [StudentDtoGroup.UPDATE_MYSELF] })
     @IsBoolean({ groups: [StudentDtoGroup.UPDATE_MYSELF] })

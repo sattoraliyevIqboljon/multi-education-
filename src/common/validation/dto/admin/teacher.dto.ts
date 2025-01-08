@@ -20,11 +20,6 @@ export class TeacherDtoGroup extends DtoGroup {
 
 export class TeacherGetDto extends PagingDto {}
 
-// Kurslar DTO
-class CourseDto {
-    @IsMongoId({ groups: [TeacherDtoGroup.CREATE, TeacherDtoGroup.UPDATE] })
-    courseId: string;
-}
 
 // Guruhlar DTO
 class GroupDto {
@@ -97,22 +92,13 @@ export class TeacherDto extends BaseDto {
     password: string;
 
     @IsOptional({ groups: [TeacherDtoGroup.UPDATE] })
-    @IsArray({ groups: [TeacherDtoGroup.CREATE, TeacherDtoGroup.UPDATE] })
-    @ValidateNested({
-        each: true,
-        groups: [TeacherDtoGroup.CREATE, TeacherDtoGroup.UPDATE],
-    })
-    @Type(() => CourseDto)
-    courses: CourseDto[];
+    @IsMongoId({ groups: [TeacherDtoGroup.CREATE, TeacherDtoGroup.UPDATE] })
+    courseId: string;
 
     @IsOptional({ groups: [TeacherDtoGroup.UPDATE] })
     @IsArray({ groups: [TeacherDtoGroup.CREATE, TeacherDtoGroup.UPDATE] })
-    @ValidateNested({
-        each: true,
-        groups: [TeacherDtoGroup.CREATE, TeacherDtoGroup.UPDATE],
-    })
-    @Type(() => GroupDto)
-    groups: GroupDto[];
+    @IsMongoId({ each:true, groups: [TeacherDtoGroup.CREATE, TeacherDtoGroup.UPDATE] })
+    groups: string[];
 
     @IsOptional({ groups: [TeacherDtoGroup.UPDATE_MYSELF] })
     @IsBoolean({ groups: [TeacherDtoGroup.UPDATE_MYSELF] })

@@ -2,7 +2,6 @@ import { getModelForClass, index, modelOptions, prop, Ref } from "@typegoose/typ
 import { Types } from "mongoose";
 import { CollectionNames } from "../../../../constant/collections";
 import { BaseModel, Logs } from "../../base.model";
-import { Role } from "../role/role.model";
 import { Course } from "../course/course.model";
 import { Group } from "../group/group.model";
 

@@ -21,8 +21,8 @@ export class Group extends BaseModel {
     description: string;
 
 
-    @prop({ type: () => [Types.ObjectId], ref: CollectionNames.COURSE })
-    courses: Ref<Course>[];
+    @prop({ type: Types.ObjectId, ref: CollectionNames.COURSE })
+    courseId: Ref<Course>;
 
   }
   

@@ -19,20 +19,11 @@ import { GroupDto } from "../../common/validation/dto/admin/group.dto";
  */
 export async function createGroupService(data: GroupDto) {
     try {
-        function dtoToModel(data: GroupDto) {
-            return {
-                ...data, // DTOning boshqa maydonlarini nusxalash
-                courses: data.courses.map(
-                    (course) => new Types.ObjectId(course.courseId) // courseId ni ObjectId ga o‘tkazish
-                )
-            };
-        }
-
-        const resData = dtoToModel(data)   
-        console.log("group create :  ", resData);
+      
+        console.log("group create :  ", data);
 
 
-        return await create(GroupModel, resData);
+        return await create(GroupModel, data);
     } catch (e) {
         if (e.code == 11000)
             throw BaseResponse.AlreadyExists(Object.keys(e.keyPattern));

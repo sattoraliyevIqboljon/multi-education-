@@ -133,7 +133,8 @@ export async function getTimeTableByPagingService(data: PagingDto) {
 
           const $project={
             $project:{
-                date:1,
+                // date:1,
+                weekdays:1,
                 startTime:1,
                 endTime:1,
                 teacher:"$teacher",
@@ -258,12 +259,13 @@ export async function getTimeTableByIdService(_id) {
 
           const $project={
             $project:{
-                date:1,
+                // date:1,
+                weekdays:1,
                 startTime:1,
                 endTime:1,
                 teacher:"$teacher",
                 course:"$course",
-                group:"$group"
+                group:"$group",
             }
           }
           const $pipeline=[
@@ -307,4 +309,136 @@ export async function deleteTimeTableService(tableId) {
         console.log(error);
         throw BaseResponse.UnknownError(error);
     }
+}
+
+
+export async function getTimeTableByDateService(date:string) {
+  try {
+
+    const weekday = new Date(date).toLocaleString('en-US', { weekday: 'long' }); /// hafta kunini olish
+    console.log(weekday); 
+
+    const $match = {
+      $match: {
+          $and: [
+              // { teacherId: new Types.ObjectId(teacherId) },
+              {weekdays: weekday},
+              { endTime: { $gte: date } },
+              { startTime: { $lte: date  } },
+          ],
+      },
+  };
+
+      const $projectTeacher = {
+          $project: {
+            firstName: 1,
+            lastName:1,
+          }
+        }
+    
+        const $lookupTeacher = {
+          $lookup: {
+            from: CollectionNames.TEACHER,
+            localField: "teacherId",
+            foreignField: "_id",
+            pipeline: [
+              $projectTeacher
+            ],
+            as: "teacher"
+          }
+        };
+    
+        const $unwindTeacher = {
+          $unwind: {
+            path: "$teacher",
+            preserveNullAndEmptyArrays: true,
+          }
+        };
+
+
+
+
+        const $projectGroup = {
+          $project: {
+            name: 1,
+            description:1
+          }
+        }
+
+        const $lookupGroup = {
+          $lookup: {
+            from: CollectionNames.GROUP,
+            localField: "groupId",
+            foreignField: "_id",
+            pipeline: [
+              $projectGroup
+            ],
+            as: "group"
+          }
+        };
+    
+        const $unwindGroup = {
+          $unwind: {
+            path: "$group",
+            preserveNullAndEmptyArrays: true,
+          }
+        };  
+
+
+
+        const $projectCourse = {
+          $project: {
+            title: 1,
+            description:1
+          }
+        }
+
+        const $lookupCourse = {
+          $lookup: {
+            from: CollectionNames.COURSE,
+            localField: "courseId",
+            foreignField: "_id",
+            pipeline: [
+              $projectCourse
+            ],
+            as: "course"
+          }
+        };
+    
+        const $unwindCourse = {
+          $unwind: {
+            path: "$course",
+            preserveNullAndEmptyArrays: true,
+          }
+        }; 
+
+        const $project={
+          $project:{
+              // date:1,
+              weekdays:1,
+              startTime:1,
+              endTime:1,
+              teacher:"$teacher",
+              course:"$course",
+              group:"$group",
+          }
+        }
+        const $pipeline=[
+          $match,
+          $lookupTeacher,
+          $unwindTeacher,
+          $lookupGroup,
+          $unwindGroup,
+          $lookupCourse,
+          $unwindCourse,
+          $project
+        ]
+
+      const table = await aggregate(TimetableModel, $pipeline);
+      if (!table[0]) throw BaseResponse.NotFound(date);
+      return table;
+  } catch (error) {
+      console.log(error);
+      throw BaseResponse.UnknownError(error);
+  }
 }

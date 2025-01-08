@@ -23,23 +23,24 @@ import { TimetableModel } from "../../common/db/model/admin/timeTable/timeTable.
  */
 export async function createTeacherService(data: TeacherDto) {
     try {
-        function dtoToModel(data: TeacherDto) {
-            return {
-                ...data, // DTOning boshqa maydonlarini nusxalash
-                courses: data.courses.map(
-                    (course) => new Types.ObjectId(course.courseId) // courseId ni ObjectId ga o‘tkazish
-                ),
-                groups: data.groups.map(
-                    (group) => new Types.ObjectId(group.groupId) // groupId ni ObjectId ga o‘tkazish
-                ),
-            };
-        }
+        // function dtoToModel(data: TeacherDto) {
+        //     return {
+        //         ...data, // DTOning boshqa maydonlarini nusxalash
+        //             // courses: data.courses.map(
+        //             //     (course) => new Types.ObjectId(course.courseId) // courseId ni ObjectId ga o‘tkazish
+        //             // ),
+        //         groups: data.groups.map(
+        //             (group) => new Types.ObjectId(group.groupId) // groupId ni ObjectId ga o‘tkazish
+        //         ),
+        //     };
+        // }
+
         console.log("teacher create :  ", data);
 
-        const resData = dtoToModel(data);
-        console.log("teacher create 2 :  ", resData);
+        // const resData = dtoToModel(data);
+        // console.log("teacher create 2 :  ", resData);
 
-        return await create(TeacherModel, resData);
+        return await create(TeacherModel, data);
     } catch (e) {
         if (e.code == 11000)
             throw TeacherResponse.AlreadyExists(Object.keys(e.keyPattern));
@@ -318,8 +319,8 @@ export async function getTimeTableByTeacherIdService(
             $match: {
                 $and: [
                     { teacherId: new Types.ObjectId(teacherId) },
-                    { date: { $gte: data.from } },
-                    { date: { $lte: data.to  } },
+                    { endTime: { $gte: data.from } },
+                    { startTime: { $lte: data.to  } },
                 ],
             },
         };
@@ -398,7 +399,8 @@ export async function getTimeTableByTeacherIdService(
 
         const $project = {
             $project: {
-                date: 1,
+                // date: 1,
+                weekdays:1,
                 startTime: 1,
                 endTime: 1,
                 teacher: "$teacher",

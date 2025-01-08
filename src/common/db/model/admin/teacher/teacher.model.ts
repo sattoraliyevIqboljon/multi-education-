@@ -53,8 +53,8 @@ export class Teacher extends BaseModel {
 
     
 
-    @prop({ type: () => [Types.ObjectId], ref: CollectionNames.COURSE })
-    courses: Ref<Course>[];
+    @prop({ type: Types.ObjectId, ref: CollectionNames.COURSE })
+courseId: Ref<Course>;
 
   
     @prop({ type: () => [Types.ObjectId], ref: CollectionNames.GROUP })

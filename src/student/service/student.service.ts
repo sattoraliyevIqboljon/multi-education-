@@ -127,8 +127,8 @@ export async function getTimeTableByStudentIdService(
             $match: {
                 $and: [
                     { groupId: { $in: groups.map(id => new Types.ObjectId(id)) } }, // groupId massiviga moslash
-                    { date: { $gte: data.from } },
-                    { date: { $lte: data.to  } },
+                    { endTime: { $gte: data.from } },
+                    { startTime: { $lte: data.to  } },
                 ],
             },
         };
